@@ -1,20 +1,23 @@
 package co.microservices.appointmentRequest.model;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.io.Serializable;
 
 /**
  * Appointment Model
  * Created by rafaellopez on 12/14/17.
  */
-public class Appointment {
+public class Appointment implements Serializable {
     private String patientId;
-    private LocalDateTime appointmentDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private String appointmentDate;
     private String doctorId;
 
     public Appointment() {
     }
 
-    public Appointment(String patientId, LocalDateTime appointmentDate, String doctorId) {
+    public Appointment(String patientId, String appointmentDate, String doctorId) {
         this.patientId = patientId;
         this.appointmentDate = appointmentDate;
         this.doctorId = doctorId;
@@ -28,11 +31,11 @@ public class Appointment {
         this.patientId = patientId;
     }
 
-    public LocalDateTime getAppointmentDate() {
+    public String getAppointmentDate() {
         return appointmentDate;
     }
 
-    public void setAppointmentDate(LocalDateTime appointmentDate) {
+    public void setAppointmentDate(String appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
 

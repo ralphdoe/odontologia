@@ -2,6 +2,8 @@ package co.microservices.appointmentRequest.controller;
 
 import co.microservices.appointmentRequest.model.Appointment;
 import co.microservices.appointmentRequest.rabbit.configuration.Publisher;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,12 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AppointmentAPIController {
 
-    private static final String EXCHANGE = "odontologia.cita.solicitudCita";
+    private static final String EXCHANGE = "cita";
     final private Publisher publisher = new Publisher();
 
     @RequestMapping(method = RequestMethod.POST, value = "/appointment")
     public ResponseEntity<Appointment> requestAppointment(@RequestBody final Appointment appointment) {
-        publisher.publishMessageAsynchhronous(EXCHANGE, appointment.getPatientId(), appointment.getDoctorId());
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            publisher.publishMessageSynchronous(EXCHANGE, "", objectMapper.writeValueAsString(appointment));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

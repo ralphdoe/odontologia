@@ -22,7 +22,6 @@ public class RabbitConfiguration {
         final CachingConnectionFactory connectionFactory = new CachingConnectionFactory(SERVER);
         connectionFactory.setUsername(USER);
         connectionFactory.setPassword(PASSWORD);
-        //connectionFactory.setPort(5672);
         connectionFactory.setVirtualHost(USER);
         connectionFactory.setChannelCheckoutTimeout(10000);
         connectionFactory.setRequestedHeartBeat(30);
