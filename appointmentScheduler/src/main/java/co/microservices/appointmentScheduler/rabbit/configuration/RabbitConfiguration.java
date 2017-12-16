@@ -38,11 +38,11 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public SimpleMessageListenerContainer container(final ConnectionFactory connectionFactory) {
+    public SimpleMessageListenerContainer container(final ConnectionFactory connectionFactory, final ConsumerListener consumerListener) {
         SimpleMessageListenerContainer container
                 = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.setMessageListener(new ConsumerListener());
+        container.setMessageListener(consumerListener);
         container.setQueueNames(QUEUE);
         container.setAcknowledgeMode(AcknowledgeMode.AUTO);
 

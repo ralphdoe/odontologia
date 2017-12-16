@@ -1,6 +1,6 @@
 #FileLock
-#Fri Dec 15 21:26:54 COT 2017
-hostName=175.50.0.39
-id=1605d2514f43719909d5da10bce4114329ada277df8
+#Sat Dec 16 14:20:49 COT 2017
+hostName=192.168.100.8
+id=16060c5593d81e0aee4219c3bc4458b35f6b67f5680
 method=file
-server=175.50.0.39\:56607
+server=192.168.100.8\:50119
