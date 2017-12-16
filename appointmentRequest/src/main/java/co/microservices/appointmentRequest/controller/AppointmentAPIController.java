@@ -2,8 +2,7 @@ package co.microservices.appointmentRequest.controller;
 
 import co.microservices.appointmentRequest.model.Appointment;
 import co.microservices.appointmentRequest.rabbit.configuration.Publisher;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import co.microservices.appointmentRequest.utilities.JSonMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,13 +22,7 @@ public class AppointmentAPIController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/appointment")
     public ResponseEntity<Appointment> requestAppointment(@RequestBody final Appointment appointment) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            publisher.publishMessageSynchronous(EXCHANGE, "", objectMapper.writeValueAsString(appointment));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
+        publisher.publishMessageSynchronous(EXCHANGE, "", JSonMapper.convertToJSON(appointment));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
