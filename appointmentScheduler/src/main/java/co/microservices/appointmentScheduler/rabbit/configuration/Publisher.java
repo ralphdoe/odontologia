@@ -20,8 +20,4 @@ public class Publisher {
     public void publishMessageSynchronous(final String exchange, final String routingKey, final String message) {
         rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }
-
-    public void publishMessageAsynchhronous(final String exchange, final String routingKey, final String message) {
-        CompletableFuture.runAsync(() -> rabbitTemplate.convertAndSend(exchange, routingKey, message));
-    }
 }

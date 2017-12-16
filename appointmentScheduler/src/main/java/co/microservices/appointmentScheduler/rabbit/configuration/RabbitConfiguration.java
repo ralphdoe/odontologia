@@ -1,5 +1,7 @@
 package co.microservices.appointmentScheduler.rabbit.configuration;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -7,6 +9,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Configuration RabbitMQ Class
@@ -37,7 +42,7 @@ public class RabbitConfiguration {
         SimpleMessageListenerContainer container
                 = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.setMessageListener(new Consumer());
+        container.setMessageListener(new ConsumerListener());
         container.setQueueNames(QUEUE);
         container.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
@@ -48,4 +53,20 @@ public class RabbitConfiguration {
     public RabbitTemplate rabbitTemplate() {
         return new RabbitTemplate(connectionFactory());
     }
+
+    static void createQueue(final String queueName) {
+        try {
+            com.rabbitmq.client.ConnectionFactory connectionFactory = new com.rabbitmq.client.ConnectionFactory();
+            connectionFactory.setHost(SERVER);
+            connectionFactory.setUsername(USER);
+            connectionFactory.setPassword(PASSWORD);
+            connectionFactory.setVirtualHost(USER);
+            Connection connection = connectionFactory.newConnection();
+            Channel channel = connection.createChannel();
+            channel.queueDeclare(queueName, false, false, false, null);
+        } catch (IOException | TimeoutException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
